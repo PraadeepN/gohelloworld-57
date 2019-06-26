@@ -43,7 +43,8 @@ pipeline {
             checkout scm
 
             // ensure we're not on a detached head
-            sh "git checkout master"
+            sh "git checkout ${env.BRANCH_NAME}"
+            sh 'git config --global credential.username PraadeepN'
             sh "git config --global credential.helper store"
             sh "jx step git credentials"
 
@@ -70,7 +71,7 @@ pipeline {
             sh "jx step helm release"
 
             // promote through all 'Auto' promotion Environments
-            sh "jx promote -b --all-auto --timeout 1h --version \$(cat ../../VERSION)"
+            sh 'jx step helm apply --namespace=upendra --name=gohelloworld-57 --no-helm-version=true --wait=false'
           }
         }
       }
